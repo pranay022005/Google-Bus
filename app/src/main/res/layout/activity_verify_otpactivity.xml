@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context=".VerifyOTPActivity">
+
+    <ImageView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/verifyotp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OTP Verification"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:textSize="26dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="sans-serif-condensed"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Enter The OTP To"
+        android:textStyle="normal"
+        android:textSize="18dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif-medium"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+91-3659264865"
+        android:textColor="@color/black"
+        android:textStyle="normal"
+        android:id="@+id/tvVerifyOTPMobileNo"
+        android:textSize="16dp"
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif-medium"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
+
+
+    <EditText
+        android:id="@+id/etVerifyOTPInputCode1"
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:imeOptions="actionNext"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:layout_marginLeft="5dp"
+        android:maxLength="1"
+        android:textSize="24dp"
+        android:textStyle="normal"/>
+
+        <EditText
+            android:id="@+id/etVerifyOTPInputCode2"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:imeOptions="actionNext"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxLength="1"
+            android:layout_marginLeft="5dp"
+            android:textSize="16dp"
+            android:textStyle="normal"/>
+
+
+        <EditText
+            android:id="@+id/etVerifyOTPInputCode3"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:fontFamily="sans-serif-medium"
+            android:imeOptions="actionNext"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textSize="16dp"
+            android:layout_marginLeft="5dp"
+            android:textStyle="normal"/>
+
+
+        <EditText
+            android:id="@+id/etVerifyOTPInputCode4"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:fontFamily="sans-serif-medium"
+            android:imeOptions="actionNext"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxLength="1"
+            android:layout_marginLeft="5dp"
+            android:textSize="16dp"
+            android:textStyle="normal"/>
+
+
+        <EditText
+            android:id="@+id/etVerifyOTPInputCode5"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:fontFamily="sans-serif-medium"
+            android:imeOptions="actionNext"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:layout_marginLeft="5dp"
+            android:maxLength="1"
+            android:textSize="16dp"
+            android:textStyle="normal"/>
+
+
+        <EditText
+            android:id="@+id/etVerifyOTPInputCode6"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:fontFamily="sans-serif-medium"
+            android:imeOptions="actionNext"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:importantForAutofill="no"
+            android:layout_marginLeft="5dp"
+            android:inputType="number"
+            android:maxLength="1"
+            android:textSize="16dp"
+            android:textStyle="normal"/>
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Didn't receive the OTP"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="17dp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif-condensed"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvVerifyOTPResentOTP"
+                android:text="Resent OTP"
+                android:textStyle="bold"
+                android:textSize="19dp"
+                android:textColor="@color/red"
+                android:layout_marginTop="4dp"
+                android:layout_marginLeft="6dp"
+                android:fontFamily="sans-serif-condensed"/>
+
+        </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Verify OTP"
+                android:id="@+id/btnVerifyOTP"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:fontFamily="sans-serif-black"
+                android:background="@drawable/btn_bg_shape" />
+
+        </LinearLayout>
+

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <item
+        android:id="@+id/menuHomeLogout"
+        android:title="Logout"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:showAsAction="always"
+        android:icon="@drawable/logout_icon"/>
+
+    <item
+        android:id="@+id/homeMenuMyProfile"
+        android:title="My Profile"
+        android:icon="@drawable/profile_icon"
+        app:showAsAction="always" />
+
+
+</menu>
