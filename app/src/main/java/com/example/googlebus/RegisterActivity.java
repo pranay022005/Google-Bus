@@ -144,7 +144,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-    @Override
+   @Override
     protected void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);

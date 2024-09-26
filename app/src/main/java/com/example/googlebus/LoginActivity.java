@@ -56,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
        GoogleSignInClient googleSignInClient;
        AppCompatButton btnSingInWithGoogle;
 
+
     @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,6 +190,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, "Login Successful Done",
                                 Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        editor.putString("username",etUserName.getText().toString()).commit();
                         startActivity(intent);
                     } else
                     {

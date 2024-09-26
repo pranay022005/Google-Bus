@@ -2,6 +2,7 @@ package com.example.googlebus;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.View;
@@ -30,7 +31,6 @@ public class MyProfileActivity extends AppCompatActivity {
 
     GoogleSignInOptions googleSignInOptions;
     GoogleSignInClient googleSignInClient;
-
 
 
     @Override
