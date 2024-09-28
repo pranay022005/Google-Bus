@@ -53,4 +53,6 @@ dependencies {
     implementation ("com.loopj.android:android-async-http:1.4.11") //client=server communication
 
     implementation ("com.google.android.gms:play-services-auth:21.2.0")
+
+    implementation ("com.github.bumptech.glide:glide:4.14.2")
 }

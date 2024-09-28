@@ -20,6 +20,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.bumptech.glide.Glide;
 import com.example.googlebus.Comman.Urls;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -99,6 +100,7 @@ public class Account_Profile_Activity extends AppCompatActivity {
                                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                                 String strid = jsonObject.getString("id");
+                                String strImage = jsonObject.getString("image");
                                 String strname = jsonObject.getString("name");
                                 String strmobileno = jsonObject.getString("mobile_no");
                                 String stremailid = jsonObject.getString("email_id");
@@ -108,6 +110,12 @@ public class Account_Profile_Activity extends AppCompatActivity {
                                 tvMobileNo.setText(strmobileno);
                                 tvEmailId.setText(stremailid);
                                 tvUsername.setText(strusername);
+
+                                Glide.with(Account_Profile_Activity.this)
+                                .load("http://172.20.10.2:80/googlebusAPI/images/"+strImage)
+                                        .skipMemoryCache(true)
+                                        .error(R.drawable.noimageavailable)
+                                        .into(ivProfilePhoto);
                             }
 
                         } catch (JSONException e) {
