@@ -22,6 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.googlebus.Comman.NetworkChangeListener;
+import com.example.googlebus.Comman.Urls;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.FirebaseException;
@@ -44,8 +45,10 @@ public class RegisterActivity extends AppCompatActivity {
     EditText etName, etMobileNo, etEmilId, etUsername, etPassword;
     AppCompatButton btnSingUp;
     TextView tvSingIn;
+
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
+
     ProgressDialog progressDialog;
 
     NetworkChangeListener networkChangeListener = new NetworkChangeListener();
@@ -103,57 +106,99 @@ public class RegisterActivity extends AppCompatActivity {
                     progressDialog.setMessage("Registration is in process");
                     progressDialog.setCanceledOnTouchOutside(true);
                     progressDialog.show();
-
-                    PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                            "+91" + etMobileNo.getText().toString(),
-                            60, TimeUnit.SECONDS, RegisterActivity.this,
-                            new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                                @Override
-                                public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(RegisterActivity.this, "Verification Completed", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onVerificationFailed(@NonNull FirebaseException e) {
-                                    progressDialog.dismiss();
-                                    Toast.makeText(RegisterActivity.this, "Verification Failed", Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void onCodeSent(@NonNull String verificationCode, @NonNull
-                                PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                                    Intent intent = new Intent(RegisterActivity.this, VerifyOTPActivity.class);
-                                    intent.putExtra("verificationCode", verificationCode);
-                                    intent.putExtra("name", etName.getText().toString());
-                                    intent.putExtra("mobileno", etMobileNo.getText().toString());
-                                    intent.putExtra("email", etEmilId.getText().toString());
-                                    intent.putExtra("username", etUsername.getText().toString());
-                                    intent.putExtra("password", etPassword.getText().toString());
-                                    startActivity(intent);
-                                }
-                            });
-                         }
-                tvSingIn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                    }
-                });
+                    userRegisterDetails();
+                }
             }
+
         });
     }
-   @Override
-    protected void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkChangeListener,intentFilter);
-    }
-    @Override
-    public void onStop() {
-        super.onStop();
-        unregisterReceiver(networkChangeListener);
-    }
-}
 
+    private void userRegisterDetails() {
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+        params.put("name", etMobileNo.getText().toString());
+        params.put("Mobileno", etEmilId.getText().toString());
+        params.put("enailid", etEmilId.getText().toString());
+        params.put("username", etUsername.getText().toString());
+
+        client.post(Urls.registerUserWebService, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+
+                try {
+                    String status = response.getString("success");
+                    if (status.equals("1")) {
+                        progressDialog.dismiss();
+                        Toast.makeText(RegisterActivity.this, "Registration Successfully Done ", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    } else {
+                        progressDialog.dismiss();
+                        Toast.makeText(RegisterActivity.this, "Already Data Present", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                progressDialog.dismiss();
+                Toast.makeText(RegisterActivity.this, "Server Error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+          PhoneAuthProvider.getInstance().verifyPhoneNumber(
+          "+91" + etMobileNo.getText().toString(),
+         60, TimeUnit.SECONDS, RegisterActivity.this,
+         new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+             @Override
+             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                 progressDialog.dismiss();
+                 Toast.makeText(RegisterActivity.this, "Verification Completed", Toast.LENGTH_SHORT).show();
+             }
+
+             @Override
+             public void onVerificationFailed(@NonNull FirebaseException e) {
+                 progressDialog.dismiss();
+                 Toast.makeText(RegisterActivity.this, "Verification Failed", Toast.LENGTH_SHORT).show();
+             }
+
+             @Override
+             public void onCodeSent(@NonNull String verificationCode, @NonNull
+             PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                 Intent intent = new Intent(RegisterActivity.this, VerifyOTPActivity.class);
+                 intent.putExtra("verificationCode", verificationCode);
+                 intent.putExtra("name", etName.getText().toString());
+                 intent.putExtra("mobileno", etMobileNo.getText().toString());
+                 intent.putExtra("email", etEmilId.getText().toString());
+                 intent.putExtra("username", etUsername.getText().toString());
+                 intent.putExtra("password", etPassword.getText().toString());
+                 startActivity(intent);
+             }
+          });
+    tvSingIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+        public void onClick(View v) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
+    });
+    }
+@Override
+         protected void onStart() {
+    super.onStart();
+         IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+         registerReceiver(networkChangeListener,intentFilter);
+           }
+        @Override
+        public void onStop() {
+            super.onStop();
+        unregisterReceiver(networkChangeListener);
+         }
+}

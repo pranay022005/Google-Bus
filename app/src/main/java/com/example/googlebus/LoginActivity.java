@@ -41,20 +41,19 @@ import cz.msebera.android.httpclient.Header;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText etUserName, etPassword;
+    EditText etUsername, etPassword;
     AppCompatButton btnSingIn;
-    TextView tvSingUp , tvForgetPassword;
+    TextView tvSingUp, tvForgetPassword;
 
     SharedPreferences preferences; // used to store the temp data
     SharedPreferences.Editor editor;
 
-       ProgressDialog progressDialog;
+    ProgressDialog progressDialog;
+    NetworkChangeListener networkChangeListener = new NetworkChangeListener();
 
-       NetworkChangeListener networkChangeListener = new NetworkChangeListener();
-
-       GoogleSignInOptions googleSignInOptions;
-       GoogleSignInClient googleSignInClient;
-       AppCompatButton btnSingInWithGoogle;
+    GoogleSignInOptions googleSignInOptions;
+    GoogleSignInClient googleSignInClient;
+    AppCompatButton btnSingInWithGoogle;
 
 
     @SuppressLint("MissingInflatedId")
@@ -71,16 +70,15 @@ public class LoginActivity extends AppCompatActivity {
             Intent i = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(i);
         }
-        etUserName = findViewById(R.id.etLoginUserName);
+        etUsername = findViewById(R.id.etLoginUserName);
         etPassword = findViewById(R.id.etLoginPassword);
         btnSingIn = findViewById(R.id.btnSingIn);
         tvSingUp = findViewById(R.id.tvSingUp);
         tvForgetPassword = findViewById(R.id.tvLoginForgetPassword);
         btnSingInWithGoogle = findViewById(R.id.btnSingInWithGoogle);
 
-
         googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        googleSignInClient = GoogleSignIn.getClient(LoginActivity.this,googleSignInOptions);
+        googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, googleSignInOptions);
 
         btnSingInWithGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,33 +89,15 @@ public class LoginActivity extends AppCompatActivity {
         btnSingIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etUserName.getText().toString().isEmpty()) {
-                    etUserName.setError("Please Enter Your Username");
+                if (etUsername.getText().toString().isEmpty()) {
+                    etUsername.setError("Please Enter Your Username");
+                } else if (etUsername.getText().toString().length() < 8) {
+                    etUsername.setError("please Enter Username greater than 8");
                 } else if (etPassword.getText().toString().isEmpty()) {
                     etPassword.setError("Please Enter Your Password");
-                } else if (etUserName.getText().toString().length() < 8) {
-                    etPassword.setError("please Enter 8 Digit Character Password");
-                } else if (!etPassword.getText().toString().matches(".*[a-z].*")) {
-                    {
-                        etPassword.setError("Password Enter At Least One Lowercase Letter");
-                    }
-                } else if (!etPassword.getText().toString().matches(".*[A-Z].*")) {
-                    {
-                        etPassword.setError("Password Enter At Least One Uppercase Letter");
-                    }
-                } else if (!etPassword.getText().toString().matches(".*[0-9].*")) {
-                    {
-                        etPassword.setError("Password Enter At Least One Number");
-                    }
-                } else if (!etPassword.getText().toString().matches(".*[@,$,&,/].*")) {
-                    {
-                        etPassword.setError("Password Enter at least one special character");
-                    }
-                } else if
-                (!etUserName.getText().toString().matches("[a-zA-Z0-9_]+")) {
-                    etUserName.setError("Username must contain only letter, numbers or underscore '_'");
-                } else
-                {
+                } else if (etPassword.getText().toString().length() < 8) {
+                    etPassword.setError("please Enter Password greater than 8");
+                } else {
                     progressDialog = new ProgressDialog(LoginActivity.this);
                     progressDialog.setTitle("Please wait");
                     progressDialog.setMessage("Login Under Process");
@@ -126,16 +106,14 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
         tvForgetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this,ConfirmRegisterMobileNoActivity.class);
+                Intent intent = new Intent(LoginActivity.this, ConfirmRegisterMobileNoActivity.class);
                 startActivity(intent);
 
             }
         });
-
         tvSingUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,16 +122,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     private void signIn() {
         Intent intent = googleSignInClient.getSignInIntent();
-        startActivityForResult(intent,999);
+        startActivityForResult(intent, 999);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 999)
-        {
+        if (requestCode == 999) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
 
             try {
@@ -163,41 +142,50 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
 
             } catch (ApiException e) {
-                Toast.makeText(this,"Something Went Wrong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Something Went Wrong", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(networkChangeListener, intentFilter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        unregisterReceiver(networkChangeListener);
+    }
+
     private void userLogin() {
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
-        params.put("username",etUserName.getText().toString());
-        params.put("password",etPassword.getText().toString());
+        params.put("username", etUsername.getText().toString());
+        params.put("password", etPassword.getText().toString());
 
-        client.post(Urls.loginUserWebService,params,new JsonHttpResponseHandler()
-
-        {
+        client.post(Urls.loginUserWebService, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                progressDialog.dismiss();
-
+               // progressDialog.dismiss();
                 try {
                     String status = response.getString("Success");
                     if (status.equals("1"))
-
                     {
                         Toast.makeText(LoginActivity.this, "Login Successful Done",
                                 Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                        editor.putString("username",etUserName.getText().toString()).commit();
+                       // editor.putString("username", etUsername.getText().toString()).commit();
                         startActivity(intent);
-                    } else
-                    {
+                        finish();
+                    } else {
                         Toast.makeText(LoginActivity.this, "Invalid Username or Password",
                                 Toast.LENGTH_SHORT).show();
                     }
-
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -210,17 +198,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Server error",
                         Toast.LENGTH_SHORT).show();
             }
-          });
-    }
-    @Override
-    protected void onStart() {
-        super.onStart();
-        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(networkChangeListener,intentFilter);
-    }
-    @Override
-    public void onStop() {
-        super.onStop();
-      unregisterReceiver(networkChangeListener);
+        });
     }
 }

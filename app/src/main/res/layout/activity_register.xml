@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:startIconDrawable="@drawable/name_icon"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="30dp"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
